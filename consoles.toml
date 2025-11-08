@@ -1,0 +1,695 @@
+[[consoles]]
+name = "Game Tank"
+cores = ["libgametank"]
+patterns = ["GAMETANK"]
+extensions = ["gtr"]
+
+[[consoles]]
+name = "Amstrad CPC"
+thegamesdb_id = 4914
+screenscraper_id = 65
+cores = ["crocods"]
+patterns = ["CPC"]
+extensions = ["sna", "kcr"]
+
+[[consoles]]
+name = "Arcade"
+thegamesdb_id = 23
+screenscraper_id = 75
+gamefaqs_archive_id = "arcade"
+cores = [
+    "mame2003_plus",
+    "fbneo",
+    "fbalpha2012",
+    "fbalpha2012_cps1",
+    "fbalpha2012_cps2",
+    "fbalpha2012_cps3",
+    "km_mame2003_xtreme",
+    "mame2003_midway",
+    "mame2003",
+    "mame2000",
+    "mba_mini",
+]
+patterns = ["ARCADE"]
+
+[[consoles]]
+name = "Atari - 800"
+thegamesdb_id = 4943
+screenscraper_id = 43
+gamefaqs_archive_id = "atari8bit"
+cores = ["atari800"]
+patterns = ["EIGHTHUNDRED"]
+extensions = ["xex"]
+
+[[consoles]]
+name = "Atari 2600"
+thegamesdb_id = 22
+screenscraper_id = 26
+cores = ["stella2014"]
+patterns = ["ATARI"]
+extensions = ["a26"]
+
+[[consoles]]
+name = "Atari 5200"
+thegamesdb_id = 26
+screenscraper_id = 40
+cores = ["a5200"]
+patterns = ["FIFTYTWOHUNDRED"]
+extensions = ["a52"]
+
+[[consoles]]
+name = "Atari 7800"
+thegamesdb_id = 27
+screenscraper_id = 41
+gamefaqs_archive_id = "atari7800"
+cores = ["prosystem"]
+patterns = ["SEVENTYEIGHTHUNDRED"]
+extensions = ["a78"]
+
+[[consoles]]
+name = "Atari Jaguar"
+thegamesdb_id = 28
+screenscraper_id = 27
+gamefaqs_archive_id = "jaguar"
+cores = ["virtualjaguar"]
+patterns = ["JAGUAR"]
+extensions = ["j64", "jag"]
+
+[[consoles]]
+name = "Atari Lynx"
+thegamesdb_id = 4924
+screenscraper_id = 28
+gamefaqs_archive_id = "lynx"
+cores = ["handy", "mednafen_lynx"]
+patterns = ["LYNX"]
+extensions = ["lnx"]
+
+[[consoles]]
+name = "Atari ST"
+thegamesdb_id = 4937
+screenscraper_id = 42
+cores = ["hatari"]
+patterns = ["ATARIST"]
+
+[[consoles]]
+name = "Sufami Turbo"
+cores = ["snes9x"]
+patterns = ["SUFAMI"]
+
+[[consoles]]
+name = "WonderSwanColor"
+thegamesdb_id = 4926
+screenscraper_id = 46
+cores = ["mednafen_wswan"]
+patterns = ["WS"]
+extensions = ["ws", "pc2"]
+
+[[consoles]]
+name = "CPS1"
+thegamesdb_id = 23
+screenscraper_id = 75
+cores = [
+    "fbalpha2012_cps1",
+    "mame2003_plus",
+    "fbneo",
+    "fbalpha2012",
+    "fbalpha2012_cps1",
+    "km_mame2003_xtreme",
+    "mame2003_midway",
+    "mame2003",
+    "mame2000",
+    "mba_mini",
+]
+patterns = ["CPS1"]
+
+[[consoles]]
+name = "CPS2"
+thegamesdb_id = 23
+screenscraper_id = 75
+cores = [
+    "fbalpha2012_cps2",
+    "mame2003_plus",
+    "fbneo",
+    "fbalpha2012",
+    "fbalpha2012_cps2",
+    "km_mame2003_xtreme",
+    "mame2003_midway",
+    "mame2003",
+    "mame2000",
+    "mba_mini",
+]
+patterns = ["CPS2"]
+
+[[consoles]]
+name = "CPS3"
+thegamesdb_id = 23
+screenscraper_id = 75
+cores = [
+    "fbalpha2012_cps3",
+    "mame2003_plus",
+    "fbneo",
+    "fbalpha2012",
+    "fbalpha2012_cps3",
+    "km_mame2003_xtreme",
+    "mame2003_midway",
+    "mame2003",
+    "mame2000",
+    "mba_mini",
+]
+patterns = ["CPS3"]
+
+[[consoles]]
+name = "ColecoVision"
+thegamesdb_id = 31
+screenscraper_id = 48
+cores = ["bluemsx"]
+patterns = ["COLECO"]
+extensions = ["ri", "col", "sc"]
+
+[[consoles]]
+name = "Amiga"
+thegamesdb_id = 4911
+screenscraper_id = 64
+cores = ["puae2021", "puae", "uae4arm"]
+patterns = ["AMIGA"]
+extensions = [
+    "adf",
+    "adz",
+    "dms",
+    "fdi",
+    "ipf",
+    "hdf",
+    "hdz",
+    "lha",
+    "slave",
+    "info",
+    "nrg",
+    "mds",
+    "uae",
+    "rp9",
+]
+
+[[consoles]]
+name = "Commodore 64"
+thegamesdb_id = 40
+screenscraper_id = 66
+gamefaqs_archive_id = "c64"
+cores = ["vice_x64"]
+patterns = ["COMMODORE"]
+
+[[consoles]]
+name = "VIC-20"
+thegamesdb_id = 4945
+screenscraper_id = 73
+cores = ["vice_xvic"]
+patterns = ["VIC20"]
+
+[[consoles]]
+name = "Fairchild ChannelF"
+thegamesdb_id = 4928
+screenscraper_id = 80
+cores = ["freechaf"]
+patterns = ["FAIRCHILD"]
+extensions = ["chf"]
+
+[[consoles]]
+name = "Vectrex"
+thegamesdb_id = 4939
+screenscraper_id = 102
+cores = ["vecx"]
+patterns = ["VECTREX"]
+extensions = ["vec"]
+
+[[consoles]]
+name = "Odyssey 2"
+thegamesdb_id = 4927
+screenscraper_id = 104
+cores = ["o2em"]
+patterns = ["ODYSSEY"]
+
+[[consoles]]
+name = "Intellivision"
+thegamesdb_id = 32
+screenscraper_id = 115
+cores = ["freeintv"]
+patterns = ["INTELLIVISION"]
+extensions = ["int"]
+
+[[consoles]]
+name = "Mega Duck"
+thegamesdb_id = 4948
+cores = ["sameduck"]
+patterns = ["MEGADUCK"]
+
+[[consoles]]
+name = "MS-DOS"
+thegamesdb_id = 1
+screenscraper_id = 135
+gamefaqs_archive_id = "pc"
+cores = ["dosbox_pure", "dosbox_pure_0.9.7"]
+patterns = ["DOS"]
+extensions = [
+    "dosz",
+    "exe",
+    "com",
+    "bat",
+    "ins",
+    "ima",
+    "vhd",
+    "jrc",
+    "tc",
+    "m3u8",
+    "conf",
+]
+
+[[consoles]]
+name = "MSX"
+thegamesdb_id = 4929
+screenscraper_id = 113
+cores = ["bluemsx", "fmsx"]
+patterns = ["MSX"]
+extensions = ["mx1", "mx2"]
+
+[[consoles]]
+name = "SuperGrafx"
+cores = ["mednafen_supergrafx"]
+patterns = ["SGFX"]
+extensions = ["sgx"]
+
+[[consoles]]
+name = "TurboGrafx CD"
+thegamesdb_id = 4955
+screenscraper_id = 114
+gamefaqs_archive_id = "turbocd"
+cores = ["mednafen_pce_fast"]
+patterns = ["PCECD"]
+
+[[consoles]]
+name = "TurboGrafx-16"
+thegamesdb_id = 34
+screenscraper_id = 31
+gamefaqs_archive_id = "tg16"
+cores = ["mednafen_pce_fast"]
+patterns = ["PCE"]
+extensions = ["pce"]
+
+[[consoles]]
+name = "Famicom Disk Syst."
+thegamesdb_id = 4936
+screenscraper_id = 106
+cores = ["fceumm"]
+patterns = ["FDS"]
+extensions = ["fds"]
+
+[[consoles]]
+name = "Game & Watch"
+thegamesdb_id = 4950
+screenscraper_id = 52
+cores = ["gw"]
+patterns = ["GW"]
+extensions = ["mgw"]
+
+[[consoles]]
+name = "Game Boy"
+thegamesdb_id = 4
+screenscraper_id = 9
+gamefaqs_archive_id = "gameboy"
+cores = ["gambatte", "tgbdual", "gearboy", "mgba", "vbam", "vba_next"]
+patterns = ["GB", "TGB_Dual"]
+extensions = ["gb"]
+
+[[consoles]]
+name = "Game Boy Color"
+thegamesdb_id = 41
+screenscraper_id = 10
+gamefaqs_archive_id = "gbc"
+cores = ["gambatte", "tgbdual", "gearboy", "mgba", "vbam", "vba_next"]
+patterns = ["GBC", "SGB"]
+extensions = ["gbc"]
+
+[[consoles]]
+name = "Game Boy Advance"
+thegamesdb_id = 5
+screenscraper_id = 12
+gamefaqs_archive_id = "gba"
+cores = ["gpsp", "mgba", "vbam", "vba_next"]
+patterns = ["GBA"]
+extensions = ["gba"]
+
+[[consoles]]
+name = "Super Game Boy"
+thegamesdb_id = 4
+screenscraper_id = 9
+cores = ["mgba", "tgbdual", "gearboy", "bsnes"]
+patterns = ["SGB"]
+
+[[consoles]]
+name = "NES"
+thegamesdb_id = 7
+screenscraper_id = 3
+gamefaqs_archive_id = "nes"
+cores = ["fceumm", "nestopia"]
+patterns = ["FC", "NES"]
+extensions = ["nes", "unif", "unf"]
+
+[[consoles]]
+name = "Pokémon Mini"
+thegamesdb_id = 4957
+screenscraper_id = 211
+cores = ["pokemini"]
+patterns = ["POKE", "PKM"]
+extensions = ["min"]
+
+[[consoles]]
+name = "Satellaview"
+cores = ["snes9x"]
+patterns = ["SATELLAVIEW"]
+extensions = ["st"]
+
+[[consoles]]
+name = "SNES"
+thegamesdb_id = 6
+screenscraper_id = 4
+gamefaqs_archive_id = "snes"
+cores = [
+    "mednafen_supafaust",
+    "snes9x",
+    "snes9x2010",
+    "snes9x2005",
+    "snes9x2005_plus",
+    "snes9x2002",
+    "chimerasnes",
+]
+patterns = ["SFC", "SNES"]
+extensions = ["sfc", "smc", "swc", "fig"]
+
+[[consoles]]
+name = "Virtual Boy"
+thegamesdb_id = 4918
+screenscraper_id = 11
+gamefaqs_archive_id = "virtualboy"
+cores = ["mednafen_vb"]
+patterns = ["VB"]
+extensions = ["vb", "vboy"]
+
+[[consoles]]
+name = "Phillips Videopac+"
+thegamesdb_id = 4927
+screenscraper_id = 104
+cores = ["o2em"]
+patterns = ["VIDEOPAC"]
+
+[[consoles]]
+name = "PICO-8"
+screenscraper_id = 234
+cores = ["fake08", "retro8"]
+patterns = ["PICO"]
+extensions = ["p8", "png"]
+
+[[consoles]]
+name = "Ports Collection"
+screenscraper_id = 135
+cores = ["native"]
+patterns = ["PORTS", "SH", "NATIVE"]
+extensions = ["port"]
+
+[[consoles]]
+name = "ScummVM"
+screenscraper_id = 123
+cores = ["scummvm"]
+patterns = ["SCUMMVM"]
+extensions = ["scummvm", "target"]
+
+[[consoles]]
+name = "Genesis 32X"
+thegamesdb_id = 33
+screenscraper_id = 19
+cores = ["picodrive"]
+patterns = ["THIRTYTWOX"]
+extensions = ["32x"]
+
+[[consoles]]
+name = "Sega CD"
+thegamesdb_id = 21
+screenscraper_id = 20
+gamefaqs_archive_id = "segacd"
+cores = ["picodrive", "genesis_plus_gx"]
+patterns = ["SEGACD"]
+
+[[consoles]]
+name = "Game Gear"
+thegamesdb_id = 20
+screenscraper_id = 21
+gamefaqs_archive_id = "gamegear"
+cores = ["picodrive", "genesis_plus_gx"]
+patterns = ["GG"]
+extensions = ["gg"]
+
+[[consoles]]
+name = "Genesis"
+thegamesdb_id = 18
+screenscraper_id = 1
+gamefaqs_archive_id = "genesis"
+cores = ["picodrive", "genesis_plus_gx"]
+patterns = ["MD"]
+extensions = ["gen", "smd", "md"]
+
+[[consoles]]
+name = "Master System"
+thegamesdb_id = 35
+screenscraper_id = 2
+gamefaqs_archive_id = "sms"
+cores = ["picodrive", "genesis_plus_gx"]
+patterns = ["MS"]
+extensions = ["sms"]
+
+[[consoles]]
+name = "SG-1000"
+thegamesdb_id = 4949
+screenscraper_id = 109
+cores = ["gearsystem"]
+patterns = ["SEGASGONE"]
+extensions = ["sg"]
+
+[[consoles]]
+name = "Sega VMU"
+cores = ["vemulator"]
+patterns = ["VMU"]
+
+[[consoles]]
+name = "ZX Spectrum"
+thegamesdb_id = 4913
+screenscraper_id = 76
+cores = ["fuse"]
+patterns = ["ZXS"]
+extensions = ["tzx", "z80", "rzx", "scl", "trd"]
+
+[[consoles]]
+name = "Neo Geo"
+thegamesdb_id = 24
+screenscraper_id = 142
+gamefaqs_archive_id = "neo"
+cores = ["fbalpha2012_neogeo"]
+patterns = ["NEOGEO"]
+
+[[consoles]]
+name = "Neo Geo CD"
+thegamesdb_id = 4956
+screenscraper_id = 70
+cores = ["neocd"]
+patterns = ["NEOCD"]
+
+[[consoles]]
+name = "Neo Geo Pocket Color"
+thegamesdb_id = 4923
+screenscraper_id = 82
+gamefaqs_archive_id = "ngpc"
+cores = ["mednafen_ngp"]
+patterns = ["NGP", "NGC"]
+extensions = ["ngp", "ngc"]
+
+[[consoles]]
+name = "PlayStation"
+thegamesdb_id = 10
+screenscraper_id = 57
+gamefaqs_archive_id = "ps"
+cores = ["pcsx_rearmed"]
+patterns = ["PSX", "PS", "PS1"]
+extensions = ["mdf", "pbp", "toc", "cbn"]
+
+[[consoles]]
+name = "TIC-80"
+cores = ["tic80"]
+patterns = ["TIC"]
+extensions = ["tic", "fd", "sap", "k7", "m7"]
+
+[[consoles]]
+name = "Watara Supervision"
+thegamesdb_id = 4959
+screenscraper_id = 207
+cores = ["potator"]
+patterns = ["SUPERVISION"]
+extensions = ["sv"]
+
+[[consoles]]
+name = "PC-8000"
+cores = ["quasi88"]
+patterns = ["PC8000"]
+
+[[consoles]]
+name = "PC-98"
+screenscraper_id = 208
+cores = ["np2kai", "nekop2"]
+patterns = ["PC98", "PCNINETYEIGHT", "NINETYEIGHT"]
+
+[[consoles]]
+name = "PC-FX"
+thegamesdb_id = 4930
+screenscraper_id = 72
+cores = ["mednafen_pcfx"]
+patterns = ["PCFX"]
+
+[[consoles]]
+name = "Cave Story"
+cores = ["nxengine"]
+patterns = ["NXENGINE"]
+file_name = ["Doukutsu.exe"]
+
+[[consoles]]
+name = "SH Launcher"
+cores = ["sh_launcher"]
+extensions = ["sh"]
+
+[[consoles]]
+name = "Sinclair ZX81"
+thegamesdb_id = 4958
+screenscraper_id = 77
+cores = ["zx81"]
+patterns = ["ZX81", "ZXEIGHTYONE"]
+
+[[consoles]]
+name = "ChaiLove"
+cores = ["chailove"]
+patterns = ["CHAILOVE"]
+
+[[consoles]]
+name = "Daphne"
+screenscraper_id = 49
+cores = ["daphne"]
+patterns = ["DAPHNE"]
+extensions = ["daphne"]
+
+[[consoles]]
+name = "EasyRPG"
+screenscraper_id = 231
+cores = ["easyrpg"]
+patterns = ["EASYRPG"]
+
+[[consoles]]
+name = "Wolfenstein 3D"
+cores = ["ecwolf"]
+patterns = ["ECWOLF"]
+
+[[consoles]]
+name = "Game Music Emu"
+cores = ["gme"]
+patterns = ["GME"]
+
+[[consoles]]
+name = "LÖVE"
+cores = ["lutro"]
+patterns = ["LOVE"]
+extensions = ["love"]
+
+[[consoles]]
+name = "Palm OS"
+thegamesdb_id = 4960
+cores = ["mu"]
+patterns = ["PALMOS"]
+extensions = ["prc", "pqa"]
+
+[[consoles]]
+name = "Texas Instruments TI-83"
+thegamesdb_id = 4953
+screenscraper_id = 205
+cores = ["numero"]
+patterns = ["TI83"]
+
+[[consoles]]
+name = "3DO"
+thegamesdb_id = 25
+screenscraper_id = 29
+cores = ["opera"]
+patterns = ["PANASONIC", "3DO"]
+
+[[consoles]]
+name = "Doom"
+cores = ["prboom"]
+patterns = ["DOOM", "PRBOOM"]
+extensions = ["wad", "iwad", "pwad"]
+
+[[consoles]]
+name = "Sharp X1"
+thegamesdb_id = 4977
+cores = ["x1"]
+patterns = ["SHARPX1"]
+
+[[consoles]]
+name = "Sharp X68000"
+thegamesdb_id = 4931
+screenscraper_id = 79
+cores = ["px68k"]
+patterns = ["X68000"]
+
+[[consoles]]
+name = "Flashback"
+cores = ["reminiscence"]
+patterns = ["FLASHBACK"]
+
+[[consoles]]
+name = "Thomson"
+cores = ["theodore"]
+patterns = ["THOMSON"]
+
+[[consoles]]
+name = "Quake"
+cores = ["tyrquake"]
+patterns = ["QUAKE"]
+
+[[consoles]]
+name = "MicroW8"
+cores = ["uw8"]
+patterns = ["MICROW8"]
+
+[[consoles]]
+name = "Uzebox"
+thegamesdb_id = 4984
+cores = ["uzem"]
+patterns = ["UZEBOX"]
+
+[[consoles]]
+name = "GCE Vectrex"
+thegamesdb_id = 4939
+screenscraper_id = 102
+cores = ["vecx"]
+patterns = ["VECRTEX"]
+
+[[consoles]]
+name = "Rick Dangerous"
+cores = ["xrick"]
+patterns = ["XRICK"]
+
+[[consoles]]
+name = "Nintendo DS"
+thegamesdb_id = 8
+screenscraper_id = 15
+gamefaqs_archive_id = "ds"
+cores = ["drastic"]
+patterns = ["NDS", "DS"]
+extensions = ["nds"]
+
+[[consoles]]
+name = "Movies"
+cores = ["ffplay"]
+patterns = ["MEDIA", "Movies"]
+extensions = ["3g2", "3gp", "aac", "avi", "flv", "m4a", "m4a", "mkv", "mj2", "mov", "mp3", "mp4", "mpeg", "ogg", "oss", "wav", "webm"]

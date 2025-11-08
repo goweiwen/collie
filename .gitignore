@@ -1,0 +1,9 @@
+/target
+/.direnv
+
+# Test ROM data (keep structure, ignore scraped content)
+tests/Roms/*/Imgs/
+tests/Roms/*/gamelist.xml
+
+# Old test structure
+test_roms/

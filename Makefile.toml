@@ -1,0 +1,59 @@
+[tasks.run]
+description = "Run"
+command = "cargo"
+args = ["run"]
+dependencies = ["frontend-build"]
+
+[tasks.build]
+description = "Build"
+command = "cargo"
+args = ["zigbuild", "--release", "--target", "${TARGET}"]
+dependencies = ["frontend-build"]
+
+[tasks.build-linux-x86_64]
+env = { "TARGET" = "x86_64-unknown-linux-gnu" }
+description = "Build for Linux x86_64"
+run_task = "build"
+
+[tasks.build-linux-aarch64]
+env = { "TARGET" = "aarch64-unknown-linux-gnu" }
+description = "Build for Linux ARM64"
+run_task = "build"
+
+[tasks.build-macos-x86_64]
+env = { "TARGET" = "x86_64-apple-darwin" }
+description = "Build for macOS x86_64"
+run_task = "build"
+
+[tasks.build-macos-aarch64]
+env = { "TARGET" = "aarch64-apple-darwin" }
+description = "Build for macOS ARM64"
+run_task = "build"
+
+[tasks.build-windows-x86_64]
+env = { "TARGET" = "x86_64-pc-windows-gnu" }
+description = "Build for Windows x86_64"
+run_task = "build"
+
+[tasks.build-windows-aarch64]
+env = { "TARGET" = "aarch64-pc-windows-gnullvm" }
+description = "Build for Windows ARM64"
+run_task = "build"
+
+[tasks.build-miyoo-mini]
+env = { "TARGET" = "armv7-unknown-linux-gnueabihf.2.28" }
+description = "Build for Miyoo Mini family"
+run_task = "build"
+
+[tasks.frontend-build]
+description = "Build frontend"
+script = "cd frontend && pnpm install && pnpm run build"
+
+[tasks.frontend-dev]
+description = "Run frontend dev server"
+script = "cd frontend && pnpm install && pnpm run dev"
+
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]

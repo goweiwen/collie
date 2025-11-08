@@ -1,0 +1,283 @@
+:root {
+  font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  font-weight: 500;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Playful color palette */
+  --primary: #6c5ce7;
+  --primary-hover: #5b4cdb;
+  --secondary: #00cec9;
+  --accent: #fd79a8;
+  --success: #00b894;
+  --warning: #fdcb6e;
+  --danger: #e17055;
+  --info: #74b9ff;
+
+  --bg-card: rgba(255, 255, 255, 0.08);
+  --bg-card-hover: rgba(255, 255, 255, 0.12);
+  --border-color: rgba(255, 255, 255, 0.15);
+  --text-muted: rgba(255, 255, 255, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1.2;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-weight: 700;
+}
+
+h3 {
+  font-weight: 600;
+}
+
+button {
+  border-radius: 12px;
+  border: none;
+  padding: 0.75em 1.5em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button.secondary {
+  background: var(--bg-card);
+  color: white;
+  box-shadow: none;
+  border: 2px solid var(--border-color);
+}
+
+button.secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+}
+
+button.danger {
+  background: linear-gradient(135deg, var(--danger), #d63031);
+  box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3);
+}
+
+button.danger:hover {
+  box-shadow: 0 6px 20px rgba(225, 112, 85, 0.4);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+input:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+select {
+  cursor: pointer;
+}
+
+select option {
+  background: var(--bg-card);
+  color: inherit;
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--primary);
+}
+
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+progress {
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: none;
+}
+
+progress::-webkit-progress-bar {
+  background: var(--bg-card);
+  border-radius: 6px;
+}
+
+progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+progress::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  border-radius: 6px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #2d3436;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(255, 255, 255, 1);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --text-muted: rgba(0, 0, 0, 0.5);
+  }
+
+  h1 {
+    background: linear-gradient(135deg, var(--primary), #5352ed, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  button {
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.25);
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  select {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+
+  select option {
+    background: white;
+  }
+
+  input[type="checkbox"] {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+}

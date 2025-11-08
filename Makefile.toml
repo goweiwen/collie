@@ -15,11 +15,6 @@ env = { "TARGET" = "x86_64-unknown-linux-gnu" }
 description = "Build for Linux x86_64"
 run_task = "build"
 
-[tasks.build-linux-aarch64]
-env = { "TARGET" = "aarch64-unknown-linux-gnu" }
-description = "Build for Linux ARM64"
-run_task = "build"
-
 [tasks.build-macos-x86_64]
 env = { "TARGET" = "x86_64-apple-darwin" }
 description = "Build for macOS x86_64"
@@ -31,13 +26,8 @@ description = "Build for macOS ARM64"
 run_task = "build"
 
 [tasks.build-windows-x86_64]
-env = { "TARGET" = "x86_64-pc-windows-gnu" }
+env = { "TARGET" = "x86_64-pc-windows-msvc" }
 description = "Build for Windows x86_64"
-run_task = "build"
-
-[tasks.build-windows-aarch64]
-env = { "TARGET" = "aarch64-pc-windows-gnullvm" }
-description = "Build for Windows ARM64"
 run_task = "build"
 
 [tasks.build-miyoo-mini]

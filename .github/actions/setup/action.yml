@@ -1,0 +1,54 @@
+name: Setup Build Environment
+description: Setup Rust, Node.js, pnpm, and build frontend
+
+inputs:
+  rust-targets:
+    description: Rust targets to install
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ inputs.rust-targets }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 8
+
+    - name: Cache pnpm modules
+      uses: actions/cache@v4
+      with:
+        path: ~/.pnpm-store
+        key: pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: pnpm-
+
+    - name: Cache Rust dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    - name: Install cargo-make
+      uses: taiki-e/install-action@cargo-make
+
+    - name: Install cargo-zigbuild
+      uses: taiki-e/install-action@cargo-zigbuild
+
+    - name: Install zig
+      uses: mlugg/setup-zig@v2

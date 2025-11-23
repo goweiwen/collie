@@ -1,4 +1,4 @@
-import type { AppState, GameData, ProgressUpdate, ScrapeConfig, SaveSettingsConfig, SaveSettingsResponse } from './types';
+import type { AppState, GameData, ListDirectoriesResponse, ProgressUpdate, ScrapeConfig, SaveSettingsConfig, SaveSettingsResponse } from './types';
 
 export async function loadState(romsPath: string): Promise<AppState> {
   const response = await fetch('/api/state', {
@@ -50,6 +50,20 @@ export async function stopScraping(): Promise<{ success: boolean; message: strin
   const response = await fetch('/api/stop', {
     method: 'POST',
   });
+  return await response.json();
+}
+
+export async function listDirectories(path: string): Promise<ListDirectoriesResponse> {
+  const response = await fetch('/api/directories', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ path }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to list directories: ${response.statusText}`);
+  }
   return await response.json();
 }
 

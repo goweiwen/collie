@@ -14,6 +14,7 @@
     useGameFAQs,
     skipCache,
   } from '../stores';
+  import FolderPicker from './FolderPicker.svelte';
 
   let { scraping = false }: { scraping?: boolean } = $props();
 
@@ -24,13 +25,7 @@
   <!-- Essential: ROMs Path -->
   <div class="form-group main-input">
     <label for="roms-path">ROMs Folder</label>
-    <input
-      id="roms-path"
-      type="text"
-      bind:value={$romsPath}
-      disabled={scraping}
-      placeholder="/path/to/your/roms"
-    />
+    <FolderPicker bind:value={$romsPath} disabled={scraping} />
   </div>
 
   <!-- Boxart Sources -->

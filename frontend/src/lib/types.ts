@@ -71,3 +71,14 @@ export interface SaveSettingsResponse {
   message: string;
   state: AppState;
 }
+
+export interface DirectoryEntry {
+  name: string;
+  path: string;
+}
+
+export interface ListDirectoriesResponse {
+  currentPath: string;
+  parentPath: string | null;
+  directories: DirectoryEntry[];
+}

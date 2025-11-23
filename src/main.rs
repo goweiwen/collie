@@ -8,6 +8,7 @@ use tokio::sync::{Mutex, broadcast};
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
+use server::api::directories::list_directories;
 use server::api::games::{get_game_by_rom_name, get_games};
 use server::api::images::serve_image;
 use server::api::scrape::{get_state, progress_stream, save_settings, start_scraping, stop_scraping};
@@ -132,6 +133,7 @@ async fn main() {
         .route("/api/scrape", post(start_scraping))
         .route("/api/stop", post(stop_scraping))
         .route("/api/state", post(get_state))
+        .route("/api/directories", post(list_directories))
         .route("/api/games", get(get_games))
         .route("/api/games/{rom_name}", get(get_game_by_rom_name))
         .route("/api/progress", get(progress_stream))

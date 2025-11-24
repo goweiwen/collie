@@ -1,5 +1,8 @@
 name: Build
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main, master ]
@@ -37,24 +40,21 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd target/${{ matrix.platform.target }}/release
-          tar czf collie-${{ matrix.platform.name }}.tar.gz collie
-          mv collie-${{ matrix.platform.name }}.tar.gz ../../../
+          cp collie ../../../collie-${{ matrix.platform.name }}
 
       - name: Prepare artifacts (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          cd target/${{ matrix.platform.target }}/release
-          Compress-Archive -Path collie.exe -DestinationPath collie-${{ matrix.platform.name }}.zip
-          Move-Item collie-${{ matrix.platform.name }}.zip ../../../
+          Copy-Item target/${{ matrix.platform.target }}/release/collie.exe collie-${{ matrix.platform.name }}.exe
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: collie-${{ matrix.platform.name }}
           path: |
-            collie-${{ matrix.platform.name }}.tar.gz
-            collie-${{ matrix.platform.name }}.zip
+            collie-${{ matrix.platform.name }}
+            collie-${{ matrix.platform.name }}.exe
           if-no-files-found: ignore
 
       - name: Upload to release
@@ -62,8 +62,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            collie-${{ matrix.platform.name }}.tar.gz
-            collie-${{ matrix.platform.name }}.zip
+            collie-${{ matrix.platform.name }}
+            collie-${{ matrix.platform.name }}.exe
           fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,21 +90,60 @@ jobs:
           lipo -create \
             target/x86_64-apple-darwin/release/collie \
             target/aarch64-apple-darwin/release/collie \
-            -output collie
-
-      - name: Prepare artifacts
-        run: tar czf collie-macos-universal.tar.gz collie
+            -output collie-macos-universal
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: collie-macos-universal
-          path: collie-macos-universal.tar.gz
+          path: collie-macos-universal
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: collie-macos-universal.tar.gz
+          files: collie-macos-universal
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  nightly:
+    name: Nightly Release
+    needs: [build, build-macos]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Collect release files
+        run: |
+          mkdir release
+          find artifacts -type f -name "collie-*" -exec mv {} release/ \;
+          ls -la release/
+
+      - name: Delete old nightly release
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete nightly --yes --cleanup-tag
+
+      - name: Create nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: Nightly Build
+          prerelease: true
+          files: release/*
+          body: |
+            Automated nightly build from the latest commit on main branch.
+
+            **Warning**: This is an unstable development build and may contain bugs.
+
+            Commit: ${{ github.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

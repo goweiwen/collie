@@ -188,6 +188,8 @@
     display: block;
     width: 100%;
     height: auto;
+    max-height: 300px;
+    object-fit: contain;
     border-radius: 14px;
   }
 

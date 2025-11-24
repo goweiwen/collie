@@ -5,7 +5,13 @@ args = ["run"]
 dependencies = ["frontend-build"]
 
 [tasks.build]
-description = "Build"
+description = "Build with cargo"
+command = "cargo"
+args = ["build", "--release", "--target", "${TARGET}"]
+dependencies = ["frontend-build"]
+
+[tasks.zigbuild]
+description = "Build with cargo-zigbuild"
 command = "cargo"
 args = ["zigbuild", "--release", "--target", "${TARGET}"]
 dependencies = ["frontend-build"]
@@ -33,7 +39,7 @@ run_task = "build"
 [tasks.build-miyoo-mini]
 env = { "TARGET" = "armv7-unknown-linux-gnueabihf.2.28" }
 description = "Build for Miyoo Mini family"
-run_task = "build"
+run_task = "zigbuild"
 
 [tasks.frontend-build]
 description = "Build frontend"

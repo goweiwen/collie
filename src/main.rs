@@ -33,10 +33,6 @@ struct Args {
     /// Don't launch the web interface in the default browser
     #[arg(long)]
     no_launch: bool,
-
-    /// Clear all cached data and start fresh (removes .collie/cache, games, state)
-    #[arg(long)]
-    no_cache: bool,
 }
 
 #[tokio::main]
@@ -57,52 +53,6 @@ async fn main() {
     println!("Web server port: {}", args.port);
 
     let roms_path = std::env::current_dir().expect("Failed to get current directory");
-
-    // Delete cache and stored data if --no-cache flag is set
-    if args.no_cache {
-        use collie::cache::ScrapeCache;
-        let collie_dir = roms_path.join(".collie");
-
-        // Clear the failure markers cache
-        let cache = ScrapeCache::new(&roms_path);
-        if let Err(e) = cache.clear_all() {
-            eprintln!("Warning: Failed to clear cache: {}", e);
-        }
-
-        // Clear stored game data
-        let games_dir = collie_dir.join("games");
-        if games_dir.exists() {
-            if let Err(e) = std::fs::remove_dir_all(&games_dir) {
-                eprintln!("Warning: Failed to clear games directory: {}", e);
-            }
-        }
-
-        // Clear games index
-        let games_index = collie_dir.join("games.txt");
-        if games_index.exists() {
-            if let Err(e) = std::fs::remove_file(&games_index) {
-                eprintln!("Warning: Failed to clear games index: {}", e);
-            }
-        }
-
-        // Clear scraping state
-        let state_file = collie_dir.join("state.json");
-        if state_file.exists() {
-            if let Err(e) = std::fs::remove_file(&state_file) {
-                eprintln!("Warning: Failed to clear state file: {}", e);
-            }
-        }
-
-        // Clear crawled file
-        let crawled_file = collie_dir.join("crawled");
-        if crawled_file.exists() {
-            if let Err(e) = std::fs::remove_file(&crawled_file) {
-                eprintln!("Warning: Failed to clear crawled file: {}", e);
-            }
-        }
-
-        println!("Cache and stored data cleared");
-    }
 
     // Load scraping state from previous sessions
     let initial_state = load_state(&roms_path);

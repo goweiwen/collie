@@ -169,22 +169,12 @@
 
   .browse-btn {
     padding: 0.5rem 1rem;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .browse-btn:hover:not(:disabled) {
-    background: var(--secondary);
   }
 
   .browse-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
   }
 
   .modal-overlay {

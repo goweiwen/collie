@@ -2,7 +2,7 @@ mod server;
 
 use axum::{Router, routing::{get, post}};
 use clap::Parser;
-use std::net::SocketAddr;
+use std::net::{IpAddr, SocketAddr};
 use std::sync::Arc;
 use tokio::sync::{Mutex, broadcast};
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -22,6 +22,10 @@ const PROGRESS_CHANNEL_SIZE: usize = 100;
 #[command(name = "collie")]
 #[command(about = "Box-art and metadata scraper for retro games", long_about = None)]
 struct Args {
+    /// Address to bind the web server to
+    #[arg(short, long, default_value = "127.0.0.1")]
+    bind: IpAddr,
+
     /// Port to run the web server on
     #[arg(short, long, default_value_t = 2435)]
     port: u16,
@@ -146,10 +150,10 @@ async fn main() {
                 .on_response(DefaultOnResponse::new().level(Level::DEBUG)),
         );
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
+    let addr = SocketAddr::new(args.bind, args.port);
     let url = format!("http://localhost:{}", args.port);
 
-    println!("\nListening on {}", url);
+    println!("\nListening on {}", addr);
     println!("Open this URL in your browser to configure the scraper.\n");
 
     // Launch browser by default unless --no-launch is specified

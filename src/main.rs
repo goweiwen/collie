@@ -30,10 +30,6 @@ struct Args {
     #[arg(short, long, default_value_t = 2435)]
     port: u16,
 
-    /// Path to the ROMs directory
-    #[arg(short, long, default_value = ".")]
-    roms_path: String,
-
     /// Don't launch the web interface in the default browser
     #[arg(long)]
     no_launch: bool,
@@ -58,10 +54,9 @@ async fn main() {
     let args = Args::parse();
 
     println!("Collie - ROM Metadata Scraper");
-    println!("ROMs path: {}", args.roms_path);
     println!("Web server port: {}", args.port);
 
-    let roms_path = std::path::PathBuf::from(&args.roms_path);
+    let roms_path = std::env::current_dir().expect("Failed to get current directory");
 
     // Delete cache and stored data if --no-cache flag is set
     if args.no_cache {

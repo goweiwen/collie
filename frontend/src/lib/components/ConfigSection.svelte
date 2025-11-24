@@ -19,6 +19,14 @@
   let { scraping = false }: { scraping?: boolean } = $props();
 
   let activeTab: 'basic' | 'advanced' = $state('basic');
+  let settingsExpanded = $state(true);
+
+  // Collapse settings when scraping starts
+  $effect(() => {
+    if (scraping) {
+      settingsExpanded = false;
+    }
+  });
 </script>
 
 <div class="config-section">
@@ -28,175 +36,195 @@
     <FolderPicker bind:value={$romsPath} disabled={scraping} />
   </div>
 
-  <!-- Boxart Sources -->
-  <div class="scraper-toggles">
-    <h3>Boxart Sources</h3>
-    <div class="toggle-grid">
-      <label class="toggle-card" class:active={$useScreenScraper}>
-        <input type="checkbox" bind:checked={$useScreenScraper} disabled={scraping} />
-        <span class="toggle-label">ScreenScraper</span>
-      </label>
-      <label class="toggle-card" class:active={$useTheGamesDB}>
-        <input type="checkbox" bind:checked={$useTheGamesDB} disabled={scraping} />
-        <span class="toggle-label">TheGamesDB</span>
-      </label>
-    </div>
-  </div>
-
-  <!-- Guides Sources -->
-  <div class="scraper-toggles">
-    <h3>Guides Sources</h3>
-    <div class="toggle-grid">
-      <label class="toggle-card" class:active={$useGameFAQs}>
-        <input type="checkbox" bind:checked={$useGameFAQs} disabled={scraping} />
-        <span class="toggle-label">GameFAQs</span>
-      </label>
-    </div>
-  </div>
-
-  <!-- Tabs for Basic/Advanced -->
-  <div class="tabs">
+  <!-- Settings Accordion -->
+  <div class="settings-accordion">
     <button
-      class="tab-btn"
-      class:active={activeTab === 'basic'}
-      onclick={() => activeTab = 'basic'}
+      class="accordion-header"
+      onclick={() => settingsExpanded = !settingsExpanded}
+      aria-expanded={settingsExpanded}
     >
-      Basic
+      <span class="accordion-title">Settings</span>
+      <span class="accordion-icon" class:expanded={settingsExpanded}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </span>
     </button>
-    <button
-      class="tab-btn"
-      class:active={activeTab === 'advanced'}
-      onclick={() => activeTab = 'advanced'}
-    >
-      Advanced
-    </button>
-  </div>
 
-  <div class="tab-content">
-    {#if activeTab === 'basic'}
-      <div class="basic-settings">
-        <div class="form-group">
-          <label for="box-art-width">Box Art Width</label>
-          <div class="slider-group">
-            <input
-              id="box-art-width"
-              type="range"
-              min="100"
-              max="500"
-              step="10"
-              bind:value={$boxArtWidth}
-              disabled={scraping}
-            />
-            <span class="slider-value">{$boxArtWidth}px</span>
+    {#if settingsExpanded}
+      <div class="accordion-content">
+        <!-- Boxart Sources -->
+        <div class="scraper-toggles">
+          <h3>Boxart Sources</h3>
+          <div class="toggle-grid">
+            <label class="toggle-card" class:active={$useScreenScraper}>
+              <input type="checkbox" bind:checked={$useScreenScraper} disabled={scraping} />
+              <span class="toggle-label">ScreenScraper</span>
+            </label>
+            <label class="toggle-card" class:active={$useTheGamesDB}>
+              <input type="checkbox" bind:checked={$useTheGamesDB} disabled={scraping} />
+              <span class="toggle-label">TheGamesDB</span>
+            </label>
           </div>
         </div>
 
-        {#if $useScreenScraper}
-          <div class="form-group">
-            <label for="box-art-type">Box Art Type</label>
-            <select
-              id="box-art-type"
-              bind:value={$boxArtType}
-              disabled={scraping}
-            >
-              {#each boxArtTypes as type}
-                <option value={type.value} disabled={type.disabled}>{type.label}</option>
-              {/each}
-            </select>
-            <div class="box-art-preview">
-              {#each previewGames as game}
-                <div class="preview-item">
-                  <img
-                    src={boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1)}
-                    alt={`${game.name} - ${$boxArtType}`}
-                    loading="lazy"
-                    onerror={(e) => {
-                      const img = e.currentTarget as HTMLImageElement;
-                      const fallbacks = [
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 0),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 1),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 0),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 1),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 0),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1, '1'),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 0, '1'),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 1, '1'),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 0, '1'),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 1, '1'),
-                        boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 0, '1'),
-                      ];
-                      const currentIndex = fallbacks.indexOf(img.src);
-                      if (currentIndex >= 0 && currentIndex < fallbacks.length - 1) {
-                        img.src = fallbacks[currentIndex + 1];
-                      }
-                    }}
+        <!-- Guides Sources -->
+        <div class="scraper-toggles">
+          <h3>Guides Sources</h3>
+          <div class="toggle-grid">
+            <label class="toggle-card" class:active={$useGameFAQs}>
+              <input type="checkbox" bind:checked={$useGameFAQs} disabled={scraping} />
+              <span class="toggle-label">GameFAQs</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tabs for Basic/Advanced -->
+        <div class="tabs">
+          <button
+            class="tab-btn"
+            class:active={activeTab === 'basic'}
+            onclick={() => activeTab = 'basic'}
+          >
+            Basic
+          </button>
+          <button
+            class="tab-btn"
+            class:active={activeTab === 'advanced'}
+            onclick={() => activeTab = 'advanced'}
+          >
+            Advanced
+          </button>
+        </div>
+
+        <div class="tab-content">
+          {#if activeTab === 'basic'}
+            <div class="basic-settings">
+              <div class="form-group">
+                <label for="box-art-width">Box Art Width</label>
+                <div class="slider-group">
+                  <input
+                    id="box-art-width"
+                    type="range"
+                    min="100"
+                    max="500"
+                    step="10"
+                    bind:value={$boxArtWidth}
+                    disabled={scraping}
                   />
-                  <span class="preview-caption">{game.name}</span>
+                  <span class="slider-value">{$boxArtWidth}px</span>
                 </div>
-              {/each}
-            </div>
-          </div>
-        {/if}
-      </div>
-    {:else}
-      <div class="advanced-settings">
-        {#if $useScreenScraper}
-          <div class="credential-section">
-            <h4>ScreenScraper Credentials</h4>
-            <p class="hint">Optional - improves rate limits</p>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="ss-username">Username</label>
-                <input
-                  id="ss-username"
-                  type="text"
-                  bind:value={$ssUsername}
-                  disabled={scraping}
-                  placeholder="Optional"
-                />
               </div>
-              <div class="form-group">
-                <label for="ss-password">Password</label>
-                <input
-                  id="ss-password"
-                  type="password"
-                  bind:value={$ssPassword}
-                  disabled={scraping}
-                />
+
+              {#if $useScreenScraper}
+                <div class="form-group">
+                  <label for="box-art-type">Box Art Type</label>
+                  <select
+                    id="box-art-type"
+                    bind:value={$boxArtType}
+                    disabled={scraping}
+                  >
+                    {#each boxArtTypes as type}
+                      <option value={type.value} disabled={type.disabled}>{type.label}</option>
+                    {/each}
+                  </select>
+                  <div class="box-art-preview">
+                    {#each previewGames as game}
+                      <div class="preview-item">
+                        <img
+                          src={boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1)}
+                          alt={`${game.name} - ${$boxArtType}`}
+                          loading="lazy"
+                          onerror={(e) => {
+                            const img = e.currentTarget as HTMLImageElement;
+                            const fallbacks = [
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 0),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 1),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 0),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 1),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 0),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 1, '1'),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, game.region, 0, '1'),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 1, '1'),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, 'wor', 0, '1'),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 1, '1'),
+                              boxArtPreviewUrl($boxArtType, game.platformId, game.gameId, '', 0, '1'),
+                            ];
+                            const currentIndex = fallbacks.indexOf(img.src);
+                            if (currentIndex >= 0 && currentIndex < fallbacks.length - 1) {
+                              img.src = fallbacks[currentIndex + 1];
+                            }
+                          }}
+                        />
+                        <span class="preview-caption">{game.name}</span>
+                      </div>
+                    {/each}
+                  </div>
+                </div>
+              {/if}
+            </div>
+          {:else}
+            <div class="advanced-settings">
+              {#if $useScreenScraper}
+                <div class="credential-section">
+                  <h4>ScreenScraper Credentials</h4>
+                  <p class="hint">Optional - improves rate limits</p>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="ss-username">Username</label>
+                      <input
+                        id="ss-username"
+                        type="text"
+                        bind:value={$ssUsername}
+                        disabled={scraping}
+                        placeholder="Optional"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="ss-password">Password</label>
+                      <input
+                        id="ss-password"
+                        type="password"
+                        bind:value={$ssPassword}
+                        disabled={scraping}
+                      />
+                    </div>
+                  </div>
+                </div>
+              {/if}
+
+              {#if $useTheGamesDB}
+                <div class="credential-section">
+                  <h4>TheGamesDB API Key</h4>
+                  <p class="hint">Required for TheGamesDB</p>
+                  <div class="form-group">
+                    <input
+                      id="tgdb-apikey"
+                      type="text"
+                      bind:value={$tgdbApiKey}
+                      disabled={scraping}
+                      placeholder="Your API key"
+                    />
+                  </div>
+                </div>
+              {/if}
+
+              {#if !$useScreenScraper && !$useTheGamesDB}
+                <p class="no-credentials">No credentials needed for selected sources.</p>
+              {/if}
+
+              <div class="option-section">
+                <label class="checkbox-option">
+                  <input type="checkbox" bind:checked={$skipCache} disabled={scraping} />
+                  <span class="checkbox-label">
+                    <strong>Skip cache</strong>
+                    <span class="checkbox-hint">Clear stored data and re-scrape everything</span>
+                  </span>
+                </label>
               </div>
             </div>
-          </div>
-        {/if}
-
-        {#if $useTheGamesDB}
-          <div class="credential-section">
-            <h4>TheGamesDB API Key</h4>
-            <p class="hint">Required for TheGamesDB</p>
-            <div class="form-group">
-              <input
-                id="tgdb-apikey"
-                type="text"
-                bind:value={$tgdbApiKey}
-                disabled={scraping}
-                placeholder="Your API key"
-              />
-            </div>
-          </div>
-        {/if}
-
-        {#if !$useScreenScraper && !$useTheGamesDB}
-          <p class="no-credentials">No credentials needed for selected sources.</p>
-        {/if}
-
-        <div class="option-section">
-          <label class="checkbox-option">
-            <input type="checkbox" bind:checked={$skipCache} disabled={scraping} />
-            <span class="checkbox-label">
-              <strong>Skip cache</strong>
-              <span class="checkbox-hint">Clear stored data and re-scrape everything</span>
-            </span>
-          </label>
+          {/if}
         </div>
       </div>
     {/if}
@@ -208,6 +236,57 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+  }
+
+  .settings-accordion {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none;
+  }
+
+  .accordion-header:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .accordion-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .accordion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+  }
+
+  .accordion-icon.expanded {
+    transform: rotate(180deg);
+  }
+
+  .accordion-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-top: 1px solid var(--border-color);
   }
 
   .main-input label {
@@ -473,6 +552,14 @@
 
     .credential-section {
       background: rgba(0, 0, 0, 0.02);
+    }
+
+    .accordion-header {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .accordion-header:hover {
+      background: rgba(0, 0, 0, 0.04);
     }
   }
 </style>

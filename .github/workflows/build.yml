@@ -39,32 +39,30 @@ jobs:
       - name: Prepare artifacts (Unix)
         if: runner.os != 'Windows'
         run: |
-          cd target/${{ matrix.platform.target }}/release
-          cp collie ../../../collie-${{ matrix.platform.name }}
+          mkdir -p dist
+          cp target/${{ matrix.platform.target }}/release/collie dist/collie
+          cd dist
+          zip collie-${{ matrix.platform.name }}.zip collie
 
       - name: Prepare artifacts (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Copy-Item target/${{ matrix.platform.target }}/release/collie.exe collie-${{ matrix.platform.name }}.exe
+          New-Item -ItemType Directory -Force -Path dist
+          Copy-Item target/${{ matrix.platform.target }}/release/collie.exe dist/collie.exe
+          Compress-Archive -Path dist/collie.exe -DestinationPath collie-${{ matrix.platform.name }}.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: collie-${{ matrix.platform.name }}
-          path: |
-            collie-${{ matrix.platform.name }}
-            collie-${{ matrix.platform.name }}.exe
-          if-no-files-found: ignore
+          path: collie-${{ matrix.platform.name }}.zip
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            collie-${{ matrix.platform.name }}
-            collie-${{ matrix.platform.name }}.exe
-          fail_on_unmatched_files: false
+          files: collie-${{ matrix.platform.name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -87,22 +85,25 @@ jobs:
 
       - name: Create universal binary
         run: |
+          mkdir -p dist
           lipo -create \
             target/x86_64-apple-darwin/release/collie \
             target/aarch64-apple-darwin/release/collie \
-            -output collie-macos-universal
+            -output dist/collie
+          cd dist
+          zip collie-macos-universal.zip collie
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: collie-macos-universal
-          path: collie-macos-universal
+          path: collie-macos-universal.zip
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: collie-macos-universal
+          files: collie-macos-universal.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

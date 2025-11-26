@@ -30,7 +30,7 @@ impl BackoffState {
                     randomization_factor: 0.0,
                     multiplier: 2.0,
                     max_interval: Duration::from_secs(300), // 5 minutes max
-                    max_elapsed_time: None,                  // Never give up
+                    max_elapsed_time: None,                 // Never give up
                     ..Default::default()
                 }
             })

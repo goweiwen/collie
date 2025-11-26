@@ -1,6 +1,9 @@
 mod server;
 
-use axum::{Router, routing::{get, post}};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use clap::Parser;
 use std::net::{IpAddr, SocketAddr};
 use std::sync::Arc;
@@ -11,7 +14,9 @@ use tracing::Level;
 use server::api::directories::list_directories;
 use server::api::games::{get_game_by_rom_name, get_games};
 use server::api::images::serve_image;
-use server::api::scrape::{get_state, progress_stream, save_settings, start_scraping, stop_scraping};
+use server::api::scrape::{
+    get_state, progress_stream, save_settings, start_scraping, stop_scraping,
+};
 use server::state::{AppState, load_state};
 use server::static_files::static_handler;
 

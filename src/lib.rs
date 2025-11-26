@@ -17,7 +17,10 @@ use storage::{append_crawled_path, append_scraped_index, save_game_data};
 use tracing::info;
 
 // Re-export commonly used types
-pub use progress::{GameData, GameGuides, GameMetadata, ProgressUpdate, ScrapeStatus, ScrapingProgress, send_progress};
+pub use progress::{
+    GameData, GameGuides, GameMetadata, ProgressUpdate, ScrapeStatus, ScrapingProgress,
+    send_progress,
+};
 pub use scraping::{ScrapingConfig, scrape_game_guides, scrape_game_metadata};
 
 pub async fn scrape(

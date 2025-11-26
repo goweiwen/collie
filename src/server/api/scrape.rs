@@ -14,7 +14,7 @@ use tokio_stream::StreamExt as _;
 use tokio_stream::wrappers::BroadcastStream;
 use tracing::debug;
 
-use crate::server::state::{AppState, ScrapingState, save_state, load_state};
+use crate::server::state::{AppState, ScrapingState, load_state, save_state};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MetadataBackendConfigs {
@@ -261,7 +261,9 @@ pub async fn start_scraping(
     }))
 }
 
-pub async fn stop_scraping(State(state): State<AppState>) -> Result<Json<ScrapeResponse>, StatusCode> {
+pub async fn stop_scraping(
+    State(state): State<AppState>,
+) -> Result<Json<ScrapeResponse>, StatusCode> {
     let scraping = state.scraping.lock().await;
 
     if !*scraping {

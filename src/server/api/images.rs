@@ -7,7 +7,10 @@ use axum::{
 
 use crate::server::state::AppState;
 
-pub async fn serve_image(State(state): State<AppState>, Path(path): Path<String>) -> Response<Body> {
+pub async fn serve_image(
+    State(state): State<AppState>,
+    Path(path): Path<String>,
+) -> Response<Body> {
     if path.is_empty() {
         return StatusCode::BAD_REQUEST.into_response();
     }

@@ -1,11 +1,8 @@
+use crate::{progress::GameData, scanner};
 use std::path::Path;
-use crate::{scanner, progress::GameData};
 
 /// Load existing game data from .collie/games/<path>.json
-pub fn load_game_data(
-    roms_path: &Path,
-    rom: &scanner::RomFile,
-) -> Option<GameData> {
+pub fn load_game_data(roms_path: &Path, rom: &scanner::RomFile) -> Option<GameData> {
     let games_dir = roms_path.join(".collie").join("games");
 
     // Create a path-safe filename using console and rom name

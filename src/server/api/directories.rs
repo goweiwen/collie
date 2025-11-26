@@ -53,7 +53,7 @@ pub async fn list_directories(
     // Calculate parent path (only if still within cwd)
     let parent_path = canonical_requested.parent().and_then(|parent| {
         if parent.starts_with(&cwd) || parent == cwd {
-            Some(parent.to_string_lossy().to_string())
+            Some(dunce::simplified(parent).to_string_lossy().to_string())
         } else {
             None
         }
@@ -79,7 +79,9 @@ pub async fn list_directories(
         })
         .map(|entry| DirectoryEntry {
             name: entry.file_name().to_string_lossy().to_string(),
-            path: entry.path().to_string_lossy().to_string(),
+            path: dunce::simplified(&entry.path())
+                .to_string_lossy()
+                .to_string(),
         })
         .collect();
 
@@ -87,7 +89,9 @@ pub async fn list_directories(
     directories.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
 
     Ok(Json(ListDirectoriesResponse {
-        current_path: canonical_requested.to_string_lossy().to_string(),
+        current_path: dunce::simplified(&canonical_requested)
+            .to_string_lossy()
+            .to_string(),
         parent_path,
         directories,
     }))

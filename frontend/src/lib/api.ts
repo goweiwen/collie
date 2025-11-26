@@ -1,4 +1,4 @@
-import type { AppState, GameData, ListDirectoriesResponse, ProgressUpdate, ScrapeConfig, SaveSettingsConfig, SaveSettingsResponse } from './types';
+import type { AppState, GameData, GamesResponse, ListDirectoriesResponse, ProgressUpdate, ScrapeConfig, SaveSettingsConfig, SaveSettingsResponse } from './types';
 
 export async function loadState(romsPath: string): Promise<AppState> {
   const response = await fetch('/api/state', {
@@ -11,8 +11,12 @@ export async function loadState(romsPath: string): Promise<AppState> {
   return await response.json();
 }
 
-export async function loadGames(): Promise<string[]> {
-  const response = await fetch('/api/games');
+export async function loadGames(offset: number = 0, limit: number = 10): Promise<GamesResponse> {
+  const params = new URLSearchParams({
+    offset: offset.toString(),
+    limit: limit.toString(),
+  });
+  const response = await fetch(`/api/games?${params}`);
   return await response.json();
 }
 
@@ -22,6 +26,11 @@ export async function loadGameByRomName(romName: string): Promise<GameData> {
     throw new Error(`Failed to load game: ${response.statusText}`);
   }
   return await response.json();
+}
+
+export async function loadGamesBatch(romNames: string[]): Promise<GameData[]> {
+  const promises = romNames.map(romName => loadGameByRomName(romName));
+  return await Promise.all(promises);
 }
 
 export async function saveSettings(config: SaveSettingsConfig): Promise<SaveSettingsResponse> {

@@ -1,15 +1,56 @@
 use axum::{
     Json,
-    extract::{Path, State},
+    extract::{Path, Query, State},
     http::StatusCode,
 };
+use serde::{Deserialize, Serialize};
 
 use crate::server::state::AppState;
 
-pub async fn get_games(State(state): State<AppState>) -> Json<Vec<String>> {
+#[derive(Debug, Deserialize)]
+pub struct PaginationParams {
+    #[serde(default)]
+    pub offset: usize,
+    #[serde(default = "default_limit")]
+    pub limit: usize,
+}
+
+fn default_limit() -> usize {
+    10
+}
+
+#[derive(Debug, Serialize)]
+pub struct GamesResponse {
+    pub games: Vec<String>,
+    pub total: usize,
+    pub offset: usize,
+    pub limit: usize,
+}
+
+pub async fn get_games(
+    State(state): State<AppState>,
+    Query(params): Query<PaginationParams>,
+) -> Json<GamesResponse> {
     let roms_path = state.roms_path.lock().unwrap().clone();
-    let games = load_scraped_index(&roms_path);
-    Json(games)
+    let mut all_games = load_scraped_index(&roms_path);
+    let total = all_games.len();
+
+    // Reverse to show newest games first (games.txt has oldest first)
+    all_games.reverse();
+
+    // Apply pagination
+    let games = all_games
+        .into_iter()
+        .skip(params.offset)
+        .take(params.limit)
+        .collect();
+
+    Json(GamesResponse {
+        games,
+        total,
+        offset: params.offset,
+        limit: params.limit,
+    })
 }
 
 pub async fn get_game_by_rom_name(

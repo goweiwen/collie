@@ -82,3 +82,10 @@ export interface ListDirectoriesResponse {
   parentPath: string | null;
   directories: DirectoryEntry[];
 }
+
+export interface GamesResponse {
+  games: string[];
+  total: number;
+  offset: number;
+  limit: number;
+}

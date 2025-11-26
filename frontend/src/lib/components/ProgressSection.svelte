@@ -13,6 +13,9 @@
     skipCount = 0,
     currentMessage = '',
     games = new SvelteMap<string, GameData>(),
+    totalGamesCount = 0,
+    loadingMore = false,
+    loadMoreGames = () => {},
     useGameFAQs = false
   }: {
     scraping?: boolean;
@@ -24,31 +27,28 @@
     skipCount?: number;
     currentMessage?: string;
     games?: SvelteMap<string, GameData>;
+    totalGamesCount?: number;
+    loadingMore?: boolean;
+    loadMoreGames?: () => Promise<void>;
     useGameFAQs?: boolean;
   } = $props();
 
   const percentage = $derived(totalGames > 0 ? Math.round((progress / totalGames) * 100) : 0);
 
   // Infinite scroll
-  const ITEMS_PER_PAGE = 10;
-  let visibleCount = $state(ITEMS_PER_PAGE);
   let loadMoreRef = $state<HTMLDivElement | null>(null);
 
-  const allGames = $derived(Array.from(games.values()).reverse());
-  const visibleGames = $derived(allGames.slice(0, visibleCount));
-  const hasMore = $derived(visibleCount < allGames.length);
-
-  function loadMore() {
-    visibleCount = Math.min(visibleCount + ITEMS_PER_PAGE, allGames.length);
-  }
+  // Games are already in newest-first order from the backend
+  const allGames = $derived(Array.from(games.values()));
+  const hasMore = $derived(games.size < totalGamesCount);
 
   $effect(() => {
     if (!loadMoreRef) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadMore();
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMoreGames();
         }
       },
       { rootMargin: '200px' }
@@ -57,13 +57,6 @@
     observer.observe(loadMoreRef);
 
     return () => observer.disconnect();
-  });
-
-  // Reset visible count when games change significantly (new scrape session)
-  $effect(() => {
-    if (games.size === 0) {
-      visibleCount = ITEMS_PER_PAGE;
-    }
   });
 </script>
 
@@ -120,10 +113,10 @@
     <div class="games-section">
       <h3 class="games-header">
         Recently Scraped Games
-        <span class="count">{games.size}</span>
+        <span class="count">{totalGamesCount > 0 ? totalGamesCount : games.size}</span>
       </h3>
       <div class="game-cards">
-        {#each visibleGames as game (game.rom_name)}
+        {#each allGames as game (game.rom_name)}
           <GameCard {game} {useGameFAQs} />
         {/each}
       </div>

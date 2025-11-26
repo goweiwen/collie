@@ -18,7 +18,7 @@
   import {
     loadState,
     loadGames,
-    loadGameByRomName,
+    loadGamesBatch,
     saveSettings as apiSaveSettings,
     startScraping as apiStartScraping,
     stopScraping as apiStopScraping,
@@ -35,6 +35,8 @@
   let games = $state<SvelteMap<string, GameData>>(new SvelteMap());
   let currentMessage = $state('');
   let eventSource = $state<EventSource | null>(null);
+  let totalGamesCount = $state(0);
+  let loadingMore = $state(false);
 
   // Load state from backend on mount
   async function loadAppState() {
@@ -49,8 +51,8 @@
       skipCount = state.skip_count;
       currentMessage = state.current_message;
 
-      // Load games separately
-      await loadAllGames();
+      // Load initial batch of games
+      await loadMoreGames();
 
       // If scraping is active, connect to progress stream
       if (state.scraping) {
@@ -61,30 +63,34 @@
     }
   }
 
-  // Load games from backend
-  async function loadAllGames() {
+  // Load more games (paginated)
+  async function loadMoreGames() {
+    if (loadingMore) return; // Prevent duplicate requests
+
     try {
-      const gamesList = await loadGames();
+      loadingMore = true;
+      const offset = games.size;
+      const limit = 10;
 
-      if (gamesList && gamesList.length > 0) {
-        console.log('Loading', gamesList.length, 'games...');
+      const response = await loadGames(offset, limit);
+      totalGamesCount = response.total;
 
-        const gamePromises = gamesList.map(async (romName: string) => {
-          try {
-            const gameData = await loadGameByRomName(romName);
-            return [romName, gameData] as [string, GameData];
-          } catch (error) {
-            console.error(`Error loading game ${romName}:`, error);
-            return null;
-          }
-        });
+      if (response.games.length > 0) {
+        console.log(`Loading ${response.games.length} games (${offset + 1}-${offset + response.games.length} of ${response.total})...`);
 
-        const gameEntries = (await Promise.all(gamePromises)).filter(Boolean) as [string, GameData][];
-        games = new SvelteMap(gameEntries);
-        console.log('Loaded', games.size, 'games');
+        const gameDataList = await loadGamesBatch(response.games);
+
+        // Add new games to the map
+        for (const gameData of gameDataList) {
+          games.set(gameData.rom_name, gameData);
+        }
+
+        console.log(`Loaded ${games.size} of ${response.total} games`);
       }
     } catch (error) {
       console.error('Error loading games:', error);
+    } finally {
+      loadingMore = false;
     }
   }
 
@@ -279,6 +285,9 @@
         {skipCount}
         {currentMessage}
         {games}
+        {totalGamesCount}
+        {loadingMore}
+        {loadMoreGames}
         useGameFAQs={$useGameFAQs}
       />
     </section>

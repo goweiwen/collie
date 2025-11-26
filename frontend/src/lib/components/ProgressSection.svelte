@@ -38,8 +38,8 @@
   // Infinite scroll
   let loadMoreRef = $state<HTMLDivElement | null>(null);
 
-  // Games are already in newest-first order from the backend
-  const allGames = $derived(Array.from(games.values()));
+  // Reverse to show newest games first
+  const allGames = $derived(Array.from(games.values()).reverse());
   const hasMore = $derived(games.size < totalGamesCount);
 
   $effect(() => {

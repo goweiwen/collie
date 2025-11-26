@@ -41,8 +41,7 @@ jobs:
         run: |
           mkdir -p dist
           cp target/${{ matrix.platform.target }}/release/collie dist/collie
-          cd dist
-          zip collie-${{ matrix.platform.name }}.zip collie
+          zip -j collie-${{ matrix.platform.name }}.zip dist/collie
 
       - name: Prepare artifacts (Windows)
         if: runner.os == 'Windows'
@@ -90,8 +89,7 @@ jobs:
             target/x86_64-apple-darwin/release/collie \
             target/aarch64-apple-darwin/release/collie \
             -output dist/collie
-          cd dist
-          zip collie-macos-universal.zip collie
+          zip -j collie-macos-universal.zip dist/collie
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

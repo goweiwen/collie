@@ -65,11 +65,19 @@
   // Get breadcrumb segments from path
   function getBreadcrumbs(path: string): { name: string; path: string }[] {
     if (!path) return [];
-    const parts = path.split('/').filter(Boolean);
+    // Detect path separator (Windows uses backslash, Unix uses forward slash)
+    const separator = path.includes('\\') ? '\\' : '/';
+    const parts = path.split(/[\\/]/).filter(Boolean);
     const breadcrumbs: { name: string; path: string }[] = [];
     let accumulated = '';
-    for (const part of parts) {
-      accumulated += '/' + part;
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      // For the first part, check if it's a Windows drive letter (e.g., "C:")
+      if (i === 0 && part.endsWith(':')) {
+        accumulated = part;
+      } else {
+        accumulated += separator + part;
+      }
       breadcrumbs.push({ name: part, path: accumulated });
     }
     return breadcrumbs;

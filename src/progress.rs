@@ -14,6 +14,11 @@ pub enum ScrapeStatus {
 
 impl ScrapeStatus {
     pub fn merge(self, other: ScrapeStatus) -> ScrapeStatus {
+        // If metadata (self) is Success, return Success regardless of guide status
+        if self == ScrapeStatus::Success {
+            return ScrapeStatus::Success;
+        }
+
         match (self, other) {
             (ScrapeStatus::Success, _) | (_, ScrapeStatus::Success) => ScrapeStatus::Success,
             (ScrapeStatus::Failed, _) | (_, ScrapeStatus::Failed) => ScrapeStatus::Failed,

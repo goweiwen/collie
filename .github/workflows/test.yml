@@ -1,0 +1,77 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test on ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu, name: Linux }
+          - { os: macos-latest, target: x86_64-apple-darwin, name: macOS }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, name: Windows }
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup build environment
+        uses: ./.github/actions/setup
+        with:
+          rust-targets: ${{ matrix.platform.target }}
+
+      - name: Build frontend
+        working-directory: frontend
+        shell: bash
+        run: pnpm install && pnpm build
+
+      - name: Run tests
+        run: cargo test --lib
+
+      - name: Run doc tests
+        run: cargo test --doc
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup build environment
+        uses: ./.github/actions/setup
+        with:
+          rust-targets: x86_64-unknown-linux-gnu
+
+      - name: Install clippy
+        run: rustup component add clippy
+
+      - name: Build frontend
+        working-directory: frontend
+        run: pnpm install && pnpm build
+
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  fmt:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check

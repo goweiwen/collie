@@ -30,7 +30,7 @@ impl GameFAQsScraper {
     /// GameFAQs uses lowercase with hyphens
     fn normalized_name(path: &Path) -> String {
         let name = path
-            .file_prefix()
+            .file_stem()
             .and_then(std::ffi::OsStr::to_str)
             .unwrap_or("")
             .to_string();
@@ -238,21 +238,21 @@ mod tests {
 
     use test_case::test_case;
 
-    #[test_case("Advance Wars", "advance-wars")]
+    #[test_case("Advance Wars.gba", "advance-wars")]
     #[test_case(
-        "Advance Wars 2: Black Hole Rising",
+        "Advance Wars 2: Black Hole Rising.gba",
         "advance-wars-2-black-hole-rising"
     )]
-    #[test_case("Pokémon: Emerald", "pokemon-emerald")]
-    #[test_case("Mario & Luigi - Superstar Saga", "mario-and-luigi-superstar-saga")]
-    #[test_case("Mario Kart - Super Circuit", "mario-kart-super-circuit")]
-    #[test_case("Mario vs. Donkey Kong", "mario-vs-donkey-kong")]
-    #[test_case("Mother 1+2", "mother-12")]
-    #[test_case("Mother 3", "mother-3")]
-    #[test_case("Ninja Five-O", "ninja-five-o")]
-    #[test_case("Spider-Man - Mysterio's Menace", "spider-man-mysterios-menace")]
+    #[test_case("Pokémon: Emerald.gba", "pokemon-emerald")]
+    #[test_case("Mario & Luigi - Superstar Saga.gba", "mario-and-luigi-superstar-saga")]
+    #[test_case("Mario Kart - Super Circuit.gba", "mario-kart-super-circuit")]
+    #[test_case("Mario vs. Donkey Kong.gba", "mario-vs-donkey-kong")]
+    #[test_case("Mother 1+2.gba", "mother-12")]
+    #[test_case("Mother 3.gba", "mother-3")]
+    #[test_case("Ninja Five-O.gba", "ninja-five-o")]
+    #[test_case("Spider-Man - Mysterio's Menace.gba", "spider-man-mysterios-menace")]
     #[test_case(
-        "Yggdra Union - We'll Never Fight Alone",
+        "Yggdra Union - We'll Never Fight Alone.gba",
         "yggdra-union-well-never-fight-alone"
     )]
     fn test_normalized_name(name: &str, expected: &str) {

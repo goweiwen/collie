@@ -110,14 +110,12 @@ fn load_game_by_rom_name(roms_path: &std::path::Path, rom_name: &str) -> Option<
     if let Ok(entries) = std::fs::read_dir(&games_dir) {
         for entry in entries.filter_map(|e| e.ok()) {
             let path = entry.path();
-            if path.extension().and_then(|s| s.to_str()) == Some("json") {
-                if let Ok(content) = std::fs::read_to_string(&path) {
-                    if let Ok(game_data) = serde_json::from_str::<collie::GameData>(&content) {
-                        if game_data.rom_name == rom_name {
-                            return Some(game_data);
-                        }
-                    }
-                }
+            if path.extension().and_then(|s| s.to_str()) == Some("json")
+                && let Ok(content) = std::fs::read_to_string(&path)
+                && let Ok(game_data) = serde_json::from_str::<collie::GameData>(&content)
+                && game_data.rom_name == rom_name
+            {
+                return Some(game_data);
             }
         }
     }

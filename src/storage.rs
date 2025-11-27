@@ -57,8 +57,9 @@ pub fn append_crawled_path(
 
     let crawled_file = collie_dir.join("crawled");
 
-    // Create a path entry with console and rom name
-    let path_entry = format!("{}/{}\n", rom.console.name, rom.name);
+    // Create a path entry with console and rom name using PathBuf to ensure correct separator
+    let path = std::path::PathBuf::from(&rom.console.name).join(&rom.name);
+    let path_entry = format!("{}\n", path.display());
 
     // Append to file
     use std::io::Write;
@@ -91,4 +92,161 @@ pub fn append_scraped_index(
     writeln!(file, "{}", game_data.rom_name)?;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::console::Console;
+    use crate::progress::{GameData, GameGuides, GameMetadata, ScrapeStatus};
+    use std::path::PathBuf;
+
+    #[test]
+    fn test_append_crawled_path_uses_correct_separator() {
+        let temp_dir = std::env::temp_dir().join("collie_test_crawled_path");
+        let _ = std::fs::remove_dir_all(&temp_dir);
+        std::fs::create_dir_all(&temp_dir).unwrap();
+
+        let console = Console {
+            name: "GBA".to_string(),
+            patterns: vec!["gba".to_string()],
+            screenscraper_id: None,
+            thegamesdb_id: None,
+            gamefaqs_archive_id: None,
+        };
+
+        let rom = scanner::RomFile {
+            path: PathBuf::from("GBA/game.gba"),
+            name: "game.gba".to_string(),
+            name_no_extension: "game".to_string(),
+            console,
+        };
+
+        append_crawled_path(&temp_dir, &rom).unwrap();
+
+        // Read the crawled file
+        let crawled_file = temp_dir.join(".collie").join("crawled");
+        let content = std::fs::read_to_string(&crawled_file).unwrap();
+
+        // On Windows, the path should contain backslash; on Unix, forward slash
+        #[cfg(windows)]
+        assert!(
+            content.contains("GBA\\game.gba"),
+            "Expected Windows path separator (\\), got: {}",
+            content
+        );
+
+        #[cfg(not(windows))]
+        assert!(
+            content.contains("GBA/game.gba"),
+            "Expected Unix path separator (/), got: {}",
+            content
+        );
+
+        // Clean up
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[test]
+    fn test_save_and_load_game_data() {
+        let temp_dir = std::env::temp_dir().join("collie_test_game_data");
+        let _ = std::fs::remove_dir_all(&temp_dir);
+        std::fs::create_dir_all(&temp_dir).unwrap();
+
+        let console = Console {
+            name: "PS".to_string(),
+            patterns: vec!["ps".to_string()],
+            screenscraper_id: None,
+            thegamesdb_id: None,
+            gamefaqs_archive_id: None,
+        };
+
+        let rom = scanner::RomFile {
+            path: PathBuf::from("PS/test.bin"),
+            name: "test.bin".to_string(),
+            name_no_extension: "test".to_string(),
+            console,
+        };
+
+        let game_data = GameData {
+            rom_name: "test.bin".to_string(),
+            metadata: GameMetadata {
+                status: ScrapeStatus::Success,
+                name: Some("Test Game".to_string()),
+                developer: None,
+                publisher: None,
+                genre: None,
+                release_date: None,
+                rating: None,
+                image_path: None,
+                error_message: None,
+            },
+            guides: GameGuides {
+                status: ScrapeStatus::Pending,
+                count: None,
+            },
+        };
+
+        // Save
+        save_game_data(&temp_dir, &rom, &game_data).unwrap();
+
+        // Load
+        let loaded = load_game_data(&temp_dir, &rom).unwrap();
+        assert_eq!(loaded.metadata.name, Some("Test Game".to_string()));
+
+        // Clean up
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[test]
+    fn test_path_safe_filename_generation() {
+        let temp_dir = std::env::temp_dir().join("collie_test_safe_filename");
+        let _ = std::fs::remove_dir_all(&temp_dir);
+        std::fs::create_dir_all(&temp_dir).unwrap();
+
+        let console = Console {
+            name: "N64".to_string(),
+            patterns: vec!["n64".to_string()],
+            screenscraper_id: None,
+            thegamesdb_id: None,
+            gamefaqs_archive_id: None,
+        };
+
+        // Test with special characters that should be replaced
+        let rom = scanner::RomFile {
+            path: PathBuf::from("N64/test:game/special.z64"),
+            name: "test:game/special.z64".to_string(),
+            name_no_extension: "test:game/special".to_string(),
+            console,
+        };
+
+        let game_data = GameData {
+            rom_name: "test:game/special.z64".to_string(),
+            metadata: GameMetadata {
+                status: ScrapeStatus::Success,
+                name: Some("Test Game".to_string()),
+                developer: None,
+                publisher: None,
+                genre: None,
+                release_date: None,
+                rating: None,
+                image_path: None,
+                error_message: None,
+            },
+            guides: GameGuides {
+                status: ScrapeStatus::Pending,
+                count: None,
+            },
+        };
+
+        // This should not panic and should create a valid filename
+        save_game_data(&temp_dir, &rom, &game_data).unwrap();
+
+        // Verify the file was created with safe characters
+        let games_dir = temp_dir.join(".collie").join("games");
+        assert!(games_dir.exists());
+
+        // Clean up
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
 }

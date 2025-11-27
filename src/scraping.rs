@@ -47,7 +47,11 @@ pub async fn scrape_game_metadata(
         game_data.metadata.status = ScrapeStatus::Skipped;
 
         if let Ok(rel_to_roms) = image_path.strip_prefix(&config.roms_path) {
-            let api_path = format!("/api/images/{}", rel_to_roms.display());
+            // Convert to forward slashes for API URLs (works on all platforms)
+            let api_path = format!(
+                "/api/images/{}",
+                rel_to_roms.display().to_string().replace('\\', "/")
+            );
             game_data.metadata.image_path = Some(api_path);
         }
 
@@ -165,7 +169,11 @@ pub async fn scrape_game_metadata(
 
                     // Set the image path for the frontend
                     if let Ok(rel_to_roms) = image_path.strip_prefix(&config.roms_path) {
-                        let api_path = format!("/api/images/{}", rel_to_roms.display());
+                        // Convert to forward slashes for API URLs (works on all platforms)
+                        let api_path = format!(
+                            "/api/images/{}",
+                            rel_to_roms.display().to_string().replace('\\', "/")
+                        );
                         game_data.metadata.image_path = Some(api_path);
                     }
                 }
@@ -293,14 +301,20 @@ pub async fn scrape_game_guides(
 
                 let mut downloaded_guides = Vec::new();
                 for guide_path in guide_paths.iter() {
-                    let guide_filename = guide_path.split('/').next_back().unwrap_or("guide.txt");
+                    // Extract filename from path - handle both forward and backslashes
+                    let guide_filename = guide_path
+                        .split(['/', '\\'])
+                        .next_back()
+                        .unwrap_or("guide.txt");
                     let guide_dest = guides_dir.join(guide_filename);
                     match guides_scraper.download_guide(guide_path, &guide_dest).await {
                         Ok(_) => {
-                            downloaded_guides.push(PathBuf::from(format!(
-                                "./{}/{}/{}",
-                                config.guides_folder, rom.name_no_extension, guide_filename
-                            )));
+                            // Use PathBuf::join to ensure correct separator for the platform
+                            let rel_path = PathBuf::from(".")
+                                .join(&config.guides_folder)
+                                .join(&rom.name_no_extension)
+                                .join(guide_filename);
+                            downloaded_guides.push(rel_path);
                         }
                         Err(e) => {
                             send_progress(

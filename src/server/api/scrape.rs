@@ -172,34 +172,34 @@ pub async fn start_scraping(
 
         // Clear stored game data
         let games_dir = collie_dir.join("games");
-        if games_dir.exists() {
-            if let Err(e) = std::fs::remove_dir_all(&games_dir) {
-                tracing::warn!("Failed to clear games directory: {}", e);
-            }
+        if games_dir.exists()
+            && let Err(e) = std::fs::remove_dir_all(&games_dir)
+        {
+            tracing::warn!("Failed to clear games directory: {}", e);
         }
 
         // Clear games index
         let games_index = collie_dir.join("games.txt");
-        if games_index.exists() {
-            if let Err(e) = std::fs::remove_file(&games_index) {
-                tracing::warn!("Failed to clear games index: {}", e);
-            }
+        if games_index.exists()
+            && let Err(e) = std::fs::remove_file(&games_index)
+        {
+            tracing::warn!("Failed to clear games index: {}", e);
         }
 
         // Clear scraping state
         let state_file = collie_dir.join("state.json");
-        if state_file.exists() {
-            if let Err(e) = std::fs::remove_file(&state_file) {
-                tracing::warn!("Failed to clear state file: {}", e);
-            }
+        if state_file.exists()
+            && let Err(e) = std::fs::remove_file(&state_file)
+        {
+            tracing::warn!("Failed to clear state file: {}", e);
         }
 
         // Clear crawled file
         let crawled_file = collie_dir.join("crawled");
-        if crawled_file.exists() {
-            if let Err(e) = std::fs::remove_file(&crawled_file) {
-                tracing::warn!("Failed to clear crawled file: {}", e);
-            }
+        if crawled_file.exists()
+            && let Err(e) = std::fs::remove_file(&crawled_file)
+        {
+            tracing::warn!("Failed to clear crawled file: {}", e);
         }
 
         tracing::info!("Cache and stored data cleared");
